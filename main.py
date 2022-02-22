@@ -2,6 +2,26 @@ from socket import *
 
 # TODO: Function to list online users, function to send a message, function to close connection
 
+def list_users(client_socket):
+    users = client_socket.recv(1024)
+    user_list = users.split(',')
+    for user in user_list:
+        print(user)
+
+
+def send_message(client_socket):
+    user_to_send_to = input("Enter user to message: ")
+    message_to_send = input("Enter message: ")
+    complete_message = "To:" + user_to_send_to + ":" + message_to_send + "\n"
+    client_socket.send(complete_message.encode())
+
+
+# List online users - server returns a comma deliminated list - list comprehension to display each name on it's own line
+
+# Send a message - Should be fairly simple
+
+# Exit - Close the connection
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     server_name = input("Enter server name: ")
