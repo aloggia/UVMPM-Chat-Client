@@ -14,6 +14,19 @@ def list_users(client_socket):
 
 def send_message(client_socket):
     user_to_send_to = input("Enter user to message: ")
+    client_socket.send("List\n".encode())
+    users = client_socket.recv(1024)[7:-1].decode()
+    user_list = users.split(",")
+    user_is_online = False
+    for user in user_list:
+        if user == user_to_send_to:
+            user_is_online = True
+    while not user_is_online:
+        print("User is not online or does not exist, please enter again")
+        user_to_send_to = input("Enter user to message: ")
+        for user in user_list:
+            if user == user_to_send_to:
+                user_is_online = True
     message_to_send = input("Enter message: ")
     complete_message = "To:" + user_to_send_to + ":" + message_to_send + "\n"
     client_socket.send(complete_message.encode())
@@ -42,7 +55,8 @@ def quit(client_socket):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    server_name = '132.198.11.12'
+    server_name = input("Enter Server IP: ")
+    # '132.198.11.12'
     server_port = 12000
     client_socket = socket(AF_INET, SOCK_STREAM)
     client_socket.connect((server_name, server_port))
@@ -73,6 +87,7 @@ if __name__ == '__main__':
                     logged_on = False
             else:
                 recieved_message = client_socket.recv(1024)[:-1].decode()
-                print(recieved_message)
+                print_message = recieved_message.split(":")
+                print(print_message[2])
     else:
         print("Error connecting to server")
