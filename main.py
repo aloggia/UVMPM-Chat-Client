@@ -27,6 +27,7 @@ def send_message(client_socket):
         for user in user_list:
             if user == user_to_send_to:
                 user_is_online = True
+    user_to_send_to = input("Enter user to message: ")
     message_to_send = input("Enter message: ")
     complete_message = "To:" + user_to_send_to + ":" + message_to_send + "\n"
     client_socket.send(complete_message.encode())
@@ -70,7 +71,7 @@ if __name__ == '__main__':
         # Needs error correcting
         sign_in(client_socket)
         while logged_on:
-            read, write, execute = select.select([sys.stdin, client_socket], [], [])
+            read, write, exception = select.select([sys.stdin, client_socket], [], [])
             print("1. List Users")
             print("2. Send Message")
             print("3. Log off")
